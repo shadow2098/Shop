@@ -1,8 +1,10 @@
 from django.shortcuts import render
+from .models import *
 
 
 def return_store(request):
-    context = {}
+    products = Product.objects.all()
+    context = {'products': products}
     return render(request, 'store_app/store.html', context)
 
 
