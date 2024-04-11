@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 from .models import *
 
 
@@ -22,4 +26,63 @@ def return_shopping_cart(request):
 
 
 def return_checkout(request):
-    return render(request, 'store_app/checkout.html', {})
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {'get_cart_price': 0, 'get_cart_items': 0}
+
+    context = {'items': items, 'order': order}
+    return render(request, 'store_app/checkout.html', context)
+
+@csrf_exempt
+def update_item(request):
+    print(request)
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
+    product_id = data['product_id']
+    action = data['action']
+    print('Action:', action)
+    print('Product:', product_id)
+
+    customer = request.user.customer
+    print(customer)
+    product = Product.objects.get(id=product_id)
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    if action == 'add':
+        order_item.quantity = (order_item.quantity + 1)
+    elif action == 'remove':
+        order_item.quantity = (order_item.quantity - 1)
+
+    order_item.save()
+
+    if order_item.quantity <= 0:
+        order_item.delete()
+
+    return JsonResponse('Item was added', safe=False)
+
+'''
+@csrf_protect
+def update_item(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            product_id = data.get('product_id')
+            action = data.get('action')
+            print('Action:', action)
+            print('Product:', product_id)
+            
+            # Return a JSON response with a success message
+            return JsonResponse({'message': 'Item was updated successfully'}, status=200)
+        except json.JSONDecodeError as e:
+            # Handle JSON decoding error
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+    else:
+        # Handle invalid request method
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+'''
