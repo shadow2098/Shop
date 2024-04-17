@@ -7,8 +7,18 @@ from .models import *
 
 
 def return_store(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        shopping_cart_items = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_price': 0, 'get_cart_items': 0}
+        shopping_cart_items = order['get_cart_items']
+
     products = Product.objects.all()
-    context = {'products': products}
+    context = {'products': products, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/store.html', context)
 
 
@@ -17,11 +27,13 @@ def return_shopping_cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
+        shopping_cart_items = order.get_cart_items
     else:
         items = []
         order = {'get_cart_price': 0, 'get_cart_items': 0}
+        shopping_cart_items = order['get_cart_items']
 
-    context = {'items': items, 'order': order}
+    context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/shopping_cart.html', context)
 
 
@@ -30,11 +42,13 @@ def return_checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
+        shopping_cart_items = order.get_cart_items
     else:
         items = []
         order = {'get_cart_price': 0, 'get_cart_items': 0}
+        shopping_cart_items = order['get_cart_items']
 
-    context = {'items': items, 'order': order}
+    context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/checkout.html', context)
 
 @csrf_exempt
