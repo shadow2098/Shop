@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import datetime
 
 
 from .models import *
@@ -83,7 +84,30 @@ def update_item(request):
 
 @csrf_exempt
 def process_order(request):
-    print("Data:", request.body)
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body.decode('utf-8'))
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id
+
+        if total == float(order.get_cart_price):
+            order.complete = True
+        order.save()
+
+        if order.shipping == True:
+            ShippingAddress.objects.create(
+                customer = customer,
+                order = order,
+                address = data['shipping']['address'],
+                city = data['shipping']['city'],
+                state = data['shipping']['state'],
+                zipcode = data['shipping']['zipcode']
+            )
+    else:
+        print("User is not logged in")
     return JsonResponse('Payment was done', safe=False)
 '''
 @csrf_protect
