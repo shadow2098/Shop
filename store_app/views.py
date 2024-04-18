@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+
 from .models import *
 
 
@@ -80,6 +81,10 @@ def update_item(request):
 
     return JsonResponse('Item was added', safe=False)
 
+@csrf_exempt
+def process_order(request):
+    print("Data:", request.body)
+    return JsonResponse('Payment was done', safe=False)
 '''
 @csrf_protect
 def update_item(request):

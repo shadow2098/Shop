@@ -127,6 +127,34 @@
                 user_data.name = form.name.value
                 user_data.email = form.email.value
             }
+
+        var url_name = 'http://127.0.0.1:8000/process_order/';
+
+        var data = {'form': user_data, 'shipping': shipping_data};
+
+        fetch(url_name, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .then(data => {
+            console.log('Response from server:', data);
+            alert('Transaction completed');
+            window.location.href = "{% url 'store' %}"
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
         }
     </script>
 {% endblock content %}
