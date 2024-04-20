@@ -6,6 +6,7 @@ import datetime
 
 
 from .models import *
+from .utils import cookie_cart
 
 
 def return_store(request):
@@ -15,9 +16,8 @@ def return_store(request):
         items = order.orderitem_set.all()
         shopping_cart_items = order.get_cart_items
     else:
-        items = []
-        order = {'get_cart_price': 0, 'get_cart_items': 0, 'shipping': False}
-        shopping_cart_items = order['get_cart_items']
+        cookie_data = cookie_cart(request)
+        shopping_cart_items = cookie_data['shopping_cart_items']
 
     products = Product.objects.all()
     context = {'products': products, 'shopping_cart_items': shopping_cart_items}
@@ -31,42 +31,10 @@ def return_shopping_cart(request):
         items = order.orderitem_set.all()
         shopping_cart_items = order.get_cart_items
     else:
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = {}
-
-        print(cart)
-        items = []
-        order = {'get_cart_price': 0, 'get_cart_items': 0, 'shipping': False}
-        shopping_cart_items = order['get_cart_items']
-
-        for i in cart:
-            try:
-                shopping_cart_items += cart[i]['quantity']
-
-                product = Product.objects.get(id=i)
-                total = product.price * cart[i]['quantity']
-
-                order['get_cart_price'] += total
-                order['get_cart_items'] += cart[i]['quantity']
-
-                item = {
-                    'product':{
-                        'id': product.id,
-                        'name': product.name,
-                        'price': product.price,
-                        'image_url': product.image_url,
-                    },
-                    'quantity': cart[i]['quantity'],
-                    'get_cart_price': total
-                }
-                items.append(item)
-
-                if product.digital == False:
-                    order['shipping'] = True
-            except:
-                pass
+        cookie_data = cookie_cart(request)
+        shopping_cart_items = cookie_data['shopping_cart_items']
+        items = cookie_data['items']
+        order = cookie_data['order']
 
     context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/shopping_cart.html', context)
@@ -79,9 +47,10 @@ def return_checkout(request):
         items = order.orderitem_set.all()
         shopping_cart_items = order.get_cart_items
     else:
-        items = []
-        order = {'get_cart_price': 0, 'get_cart_items': 0, 'shipping': False}
-        shopping_cart_items = order['get_cart_items']
+        cookie_data = cookie_cart(request)
+        shopping_cart_items = cookie_data['shopping_cart_items']
+        items = cookie_data['items']
+        order = cookie_data['order']
 
     context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/checkout.html', context)
