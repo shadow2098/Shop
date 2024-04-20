@@ -150,6 +150,9 @@
         .then(data => {
             console.log('Response from server:', data);
             alert('Transaction completed');
+            cart = {}
+            document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
+            console.log("CART IS CLEARED")
             window.location.href = "{% url 'store' %}"
         })
         .catch(error => {
