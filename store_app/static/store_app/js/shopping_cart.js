@@ -8,13 +8,37 @@ for (i = 0; i < updateBtns.length; i++) {
 
         console.log('USER:', user)
         if (user == 'AnonymousUser'){
-            console.log('User is not authenticated')
+            add_cookie_item(product_id, action)
             
         }else{
             update_order(product_id, action)
         }
 
     })
+}
+
+function add_cookie_item(product_id, action){
+    console.log('User is not authenticatedggg')
+
+    if (action == 'add'){
+        if (cart[product_id] == undefined){
+            cart[product_id] = {'quantity': 1}
+        } else{
+            cart[product_id]['quantity'] += 1
+        }
+    }
+
+    if (action == 'remove'){
+        cart[product_id]['quantity'] -= 1
+
+        if (cart[product_id]['quantity'] <= 0){
+            console.log('Item was removed')
+            delete cart[product_id]
+        }
+    }
+    console.log('Cart js cart:', cart)
+    document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
+    location.reload()
 }
 
 async function update_order(product_id, action){

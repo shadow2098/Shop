@@ -16,7 +16,7 @@
     <script type="text/javascript">
         var user = '{{request.user}}'
 
-        function getToken(name) {
+        function get_token(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
@@ -31,8 +31,28 @@
             }
             return cookieValue;
         }
-        var csrftoken = getToken('csrftoken')
+        var csrftoken = get_token('csrftoken')
     
+
+        function get_cookie(name){
+            var cookie_arr = document.cookie.split(';');
+
+            for (var i = 0; i < cookie_arr.length; i++){
+                var cookie_pair = cookie_arr[i].split('=');
+                if (name == cookie_pair[0].trim()){
+                    return decodeURIComponent(cookie_pair[1]);
+                }
+            }
+            return null;
+        }
+
+        var cart = JSON.parse(get_cookie('cart'))
+        if (cart == undefined){
+            cart = {}
+            console.log('Cart was created')
+            document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
+        }
+        console.log('Cart:', cart)
     </script>
 </head>
 <body>
