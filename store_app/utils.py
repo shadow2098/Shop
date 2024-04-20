@@ -55,3 +55,30 @@ def cart_data(request):
         order = cookie_data['order']
 
     return {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
+
+
+def anonymous_order(request, data):
+    name = data['form']['name']
+    email = data['form']['email']
+
+    cookie_data = cookie_cart(request)
+    items = cookie_data['items']
+
+    customer, created = Customer.objects.get_or_create(email=email)
+    customer.name = name
+    customer.save()
+
+    order = Order.objects.create(
+        customer=customer,
+        complete=False,
+        )
+
+    for item in items:
+        product = Product.objects.get(id=item['product']['id'])
+
+        order_item = OrderItem.objects.create(
+            product=product,
+            order=order,
+            quantity=item['quantity']
+            )
+    return customer, order

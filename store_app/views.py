@@ -6,7 +6,7 @@ import datetime
 
 
 from .models import *
-from .utils import cookie_cart, cart_data
+from .utils import cookie_cart, cart_data, anonymous_order
 
 
 def return_store(request):
@@ -82,29 +82,7 @@ def process_order(request):
         print("User is not logged in")
         print("Cookies:", request.COOKIES)
 
-        name = data['form']['name']
-        email = data['form']['email']
-
-        cookie_data = cookie_cart(request)
-        items = cookie_data['items']
-
-        customer, created = Customer.objects.get_or_create(email=email)
-        customer.name = name
-        customer.save()
-
-        order = Order.objects.create(
-            customer=customer,
-            complete=False,
-            )
-
-        for item in items:
-            product = Product.objects.get(id=item['product']['id'])
-
-            order_item = OrderItem.objects.create(
-                product=product,
-                order=order,
-                quantity=item['quantity']
-                )
+        customer, order = anonymous_order(request, data)
 
     total = float(data['form']['total'])
     order.transaction_id = transaction_id
