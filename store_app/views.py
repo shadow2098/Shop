@@ -6,18 +6,12 @@ import datetime
 
 
 from .models import *
-from .utils import cookie_cart
+from .utils import cookie_cart, cart_data
 
 
 def return_store(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        shopping_cart_items = order.get_cart_items
-    else:
-        cookie_data = cookie_cart(request)
-        shopping_cart_items = cookie_data['shopping_cart_items']
+    data = cart_data(request)
+    shopping_cart_items = data['shopping_cart_items']
 
     products = Product.objects.all()
     context = {'products': products, 'shopping_cart_items': shopping_cart_items}
@@ -25,35 +19,26 @@ def return_store(request):
 
 
 def return_shopping_cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        shopping_cart_items = order.get_cart_items
-    else:
-        cookie_data = cookie_cart(request)
-        shopping_cart_items = cookie_data['shopping_cart_items']
-        items = cookie_data['items']
-        order = cookie_data['order']
+    data = cart_data(request)
+
+    shopping_cart_items = data['shopping_cart_items']
+    items = data['items']
+    order = data['order']
 
     context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/shopping_cart.html', context)
 
 
 def return_checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        shopping_cart_items = order.get_cart_items
-    else:
-        cookie_data = cookie_cart(request)
-        shopping_cart_items = cookie_data['shopping_cart_items']
-        items = cookie_data['items']
-        order = cookie_data['order']
+    data = cart_data(request)
+
+    shopping_cart_items = data['shopping_cart_items']
+    items = data['items']
+    order = data['order']
 
     context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/checkout.html', context)
+
 
 @csrf_exempt
 def update_item(request):

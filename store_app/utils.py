@@ -40,3 +40,18 @@ def cookie_cart(request):
         except:
             pass
     return {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
+
+
+def cart_data(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        shopping_cart_items = order.get_cart_items
+    else:
+        cookie_data = cookie_cart(request)
+        shopping_cart_items = cookie_data['shopping_cart_items']
+        items = cookie_data['items']
+        order = cookie_data['order']
+
+    return {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
