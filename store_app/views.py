@@ -8,6 +8,8 @@ import datetime
 from .models import *
 from .utils import cookie_cart, cart_data, anonymous_order
 
+def return_log_in(request):
+    return render(request, 'store_app/log_in.html', {})
 
 def return_store(request):
     data = cart_data(request)

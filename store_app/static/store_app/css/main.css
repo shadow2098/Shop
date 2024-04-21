@@ -6,6 +6,38 @@ h1,h2,h3,h4,h5,h6{
     color:hsl(0, 0%, 0%);
 }
 
+label {
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+select {
+    width:250px;
+    display: inline-block;
+    padding: 5px;
+    font-size: 0.9rem;
+    opacity: .6;
+
+}
+
+.opacity {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    opacity: .7;
+}
+
+.log_in-box-element{
+    margin-top: 40px;
+    margin-left: 300px;
+    margin-right: 80px;
+    box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+}
+
 .box-element{
     box-shadow:hsl(0, 0%, 80%) 0 0 16px;
     background-color: #fff;
@@ -48,6 +80,11 @@ h1,h2,h3,h4,h5,h6{
 
 .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12{
     margin-top: 10px;
+}
+
+.log-in-btn{
+    margin-left: 125px;
+    padding: 10px;
 }
 
 .btn{
