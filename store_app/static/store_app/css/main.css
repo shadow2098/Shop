@@ -21,6 +21,10 @@ select {
 
 }
 
+.hello {
+    border-radius: 0;
+}
+
 .opacity {
     width: 100px;
     height: 100px;

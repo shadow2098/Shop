@@ -72,7 +72,9 @@
                 
             </ul>
             <div class="form-inline my-2 my-lg-0">
-                <a href="{% url 'log_in' %}"class="btn btn-warning">Login</a>
+                <p id="text" class="hello account-in-btn bg-dark" style="color:white;">Hello, {{request.user.username}}</p>
+                <a href="{% url 'log_in' %}" id="in" class="btn btn-warning">Log in</a>
+                <a href="{% url 'log_out' %}" id="out" class="btn btn-warning">Log out</a>
             
                 <a href="{% url 'shopping_cart' %}">
                     <img  id="cart-icon" src="{% static 'store_app/images/shopping_cart.png' %}">
@@ -98,5 +100,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="{% static 'store_app/js/shopping_cart.js' %}"></script>
+
+    <script type="text/javascript">
+        if (user == 'AnonymousUser'){
+            document.getElementById('text').classList.add('hidden');
+            document.getElementById('out').classList.add('hidden');
+        }
+        if (user != 'AnonymousUser'){
+            document.getElementById('in').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
