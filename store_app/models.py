@@ -1,14 +1,51 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User #, UserManager
+
+'''
+class models.User
+User objects have the following fields:
+
+username¶
+Required. 150 characters or fewer. Usernames may contain alphanumeric, _, @, +, . and - characters.
+
+The max_length should be sufficient for many use cases. If you need a longer length, please use a custom user model. If you use MySQL with the utf8mb4 encoding (recommended for proper Unicode support), specify at most max_length=191 because MySQL can only create unique indexes with 191 characters in that case by default.
+
+first_name¶
+Optional (blank=True). 150 characters or fewer.
+
+last_name¶
+Optional (blank=True). 150 characters or fewer.
+
+email
+Optional (blank=True). Email address.
+
+password
+'''
+#class Guest(models.Model):
+    #username = models.CharField(max_length=200, null=False)
+    #email = models.CharField(max_length=200, null=False)
+
+    #def __str__(self):
+        #return self.username
 
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)
-    email = models.CharField(max_length=200, null=True)
+    username = models.CharField(max_length=200, null=False)
+    email = models.CharField(max_length=200, null=False)
+    password = models.CharField(max_length=200, null=False)
+    gender = models.CharField(max_length=20, null=True, blank=True)
+
 
     def __str__(self):
-        return self.name
+        return self.username
+
+    @staticmethod
+    def create_new_user(username, email, password):
+        new_user = User.objects.create_user(username=username, email=email, password=password)
+        return new_user
+
+
 
 
 class Product(models.Model):

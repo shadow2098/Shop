@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 import json
 import datetime
 
@@ -10,6 +11,45 @@ from .utils import cookie_cart, cart_data, anonymous_order
 
 def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})
+
+def return_sign_up(request):
+    print('hello1234')
+    return render(request, 'store_app/sign_up.html', {})
+
+@csrf_exempt
+def process_sign_up(request):
+    print('hello from process_sign_up')
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
+    password = data['password']
+    username = data['username']
+    email = data['email']
+    gender = data['gender']
+
+    print("User:", request.user)
+    print("ENTER TRY")
+    customer, account_status = Customer.objects.get_or_create(username=username, email=email, gender=gender)
+    if account_status == True:
+        new_user = Customer.create_new_user(username=username, email=email, password=password)
+        new_user = authenticate(username=username, email=email, password=password)
+        customer.user = new_user
+        customer.save()
+        #login(request, new_user)
+        logout(request)
+        print('new_user:', new_user)
+        print('new_user.password', customer.user.password)
+        print('customer.password______-----', customer.password)
+        print('check with true password', customer.user.check_password(password))
+        print('check with wrong password', customer.user.check_password("hello"))
+        print('gender:', customer.gender)
+
+        print("ACCOUNT CREATED SUCCSESSFULLY")
+    else:
+        print("Sorry the username or email is taken")
+
+    return JsonResponse('sign_up was done', safe=False)
+
+
 
 def return_store(request):
     data = cart_data(request)
