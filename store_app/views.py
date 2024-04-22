@@ -9,41 +9,37 @@ import datetime
 from .models import *
 from .utils import cookie_cart, cart_data, anonymous_order
 
+
+#print('check with true password', customer.user.check_password(password))
+#logout(request)
+
 def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})
 
 def return_sign_up(request):
-    print('hello1234')
     return render(request, 'store_app/sign_up.html', {})
+
+def log_out(request):
+    logout(request)
+    return return_store(request)
+
 
 @csrf_exempt
 def process_sign_up(request):
-    print('hello from process_sign_up')
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
     password = data['password']
     username = data['username']
     email = data['email']
     gender = data['gender']
 
-    print("User:", request.user)
-    print("ENTER TRY")
-    customer, account_status = Customer.objects.get_or_create(username=username, email=email, gender=gender)
+    customer, account_status = Customer.objects.get_or_create(username=username)
+
     if account_status == True:
         new_user = Customer.create_new_user(username=username, email=email, password=password)
         new_user = authenticate(username=username, email=email, password=password)
         customer.user = new_user
         customer.save()
-        #login(request, new_user)
-        logout(request)
-        print('new_user:', new_user)
-        print('new_user.password', customer.user.password)
-        print('customer.password______-----', customer.password)
-        print('check with true password', customer.user.check_password(password))
-        print('check with wrong password', customer.user.check_password("hello"))
-        print('gender:', customer.gender)
-
-        print("ACCOUNT CREATED SUCCSESSFULLY")
+        login(request, new_user)
     else:
         print("Sorry the username or email is taken")
 

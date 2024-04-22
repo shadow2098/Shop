@@ -58,14 +58,14 @@ def cart_data(request):
 
 
 def anonymous_order(request, data):
-    name = data['form']['name']
+    username = data['form']['username']
     email = data['form']['email']
 
     cookie_data = cookie_cart(request)
     items = cookie_data['items']
 
     customer, created = Customer.objects.get_or_create(email=email)
-    customer.name = name
+    customer.username = username
     customer.save()
 
     order = Order.objects.create(
