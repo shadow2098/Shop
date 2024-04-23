@@ -10,6 +10,13 @@ class AbstracClass(models.Model):
         raise NotImplementedError("Subclasses must implement return_name method")
 
 
+class Guest(AbstracClass):
+    _guest_username = models.CharField(max_length=200, null=False)
+    _guest_email = models.CharField(max_length=200, null=False)
+
+    def return_name(self):
+        return self._guest_username
+
 class Customer(AbstracClass):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     _username = models.CharField(max_length=200, null=False)
@@ -45,7 +52,8 @@ class Product(AbstracClass):
 
 
 class Order(models.Model) :
-    customer = models. ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    guest = models.ForeignKey(Guest, on_delete=models.SET_NULL, null=True, blank=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
@@ -98,6 +106,7 @@ class OrderItem(models.Model) :
 
 class ShippingAddress (models.Model):
     customer = models. ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    guest = models.ForeignKey(Guest, on_delete=models.SET_NULL, null=True, blank=True)
     order = models. ForeignKey (Order, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=False)
     city = models.CharField(max_length=200, null=False)
