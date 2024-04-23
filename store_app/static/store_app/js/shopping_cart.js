@@ -17,8 +17,9 @@ for (i = 0; i < updateBtns.length; i++) {
     })
 }
 
+
 function add_cookie_item(product_id, action){
-    console.log('User is not authenticatedggg')
+    console.log('User is not authenticated')
 
     if (action == 'add'){
         if (cart[product_id] == undefined){
@@ -40,6 +41,7 @@ function add_cookie_item(product_id, action){
     document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
     location.reload()
 }
+
 
 async function update_order(product_id, action){
     console.log('User is logged in');

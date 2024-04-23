@@ -1,13 +1,13 @@
 from .models import *
 import json
 
+
 def cookie_cart(request):
     try:
         cart = json.loads(request.COOKIES['cart'])
     except:
         cart = {}
 
-    print(cart)
     items = []
     order = {'get_cart_price': 0, 'get_cart_items': 0, 'shipping': False}
     shopping_cart_items = order['get_cart_items']
@@ -83,4 +83,5 @@ def anonymous_order(request, data):
             order=order,
             quantity=item['quantity']
             )
+
     return guest, order

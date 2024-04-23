@@ -1,19 +1,16 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
-import json
-import datetime
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, render
+from django.http import JsonResponse
 from itertools import chain
-from django.shortcuts import redirect
 
 
-from .models import *
+import datetime
+import json
+
 from .utils import cookie_cart, cart_data, anonymous_order
+from .models import *
 
-
-#print('check with true password', customer.user.check_password(password))
-#logout(request)
 
 def export_all_usernames(request):
     customer_list = Customer.objects.all()
@@ -34,8 +31,8 @@ def export_all_usernames(request):
         f.write('\n')
 
     f.close()
-    from django.shortcuts import redirect
     return redirect('/usernames.txt/')
+
 
 def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})
@@ -90,8 +87,8 @@ def process_account(request):
 def return_store(request):
     data = cart_data(request)
     shopping_cart_items = data['shopping_cart_items']
-
     products = Product.objects.all()
+
     context = {'products': products, 'shopping_cart_items': shopping_cart_items}
     return render(request, 'store_app/store.html', context)
 
@@ -120,19 +117,14 @@ def return_checkout(request):
 
 @csrf_exempt
 def update_item(request):
-    print(request)
     data = json.loads(request.body.decode('utf-8'))
-    print(data)
+
     product_id = data['product_id']
     action = data['action']
-    print('Action:', action)
-    print('Product:', product_id)
 
     customer = request.user.customer
-    print(customer)
     product = Product.objects.get(id=product_id)
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
     order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
 
     if action == 'add':
@@ -147,6 +139,7 @@ def update_item(request):
 
     return JsonResponse('Item was added', safe=False)
 
+
 @csrf_exempt
 def process_order(request):
     transaction_id = datetime.datetime.now().timestamp()
@@ -155,7 +148,6 @@ def process_order(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
     else:
         print("User is not logged in")
         print("Cookies:", request.COOKIES)
@@ -178,7 +170,6 @@ def process_order(request):
             state = data['shipping']['state'],
             zipcode = data['shipping']['zipcode']
         )
-
     else:
         ShippingAddress.objects.create(
             guest = customer,
@@ -188,24 +179,5 @@ def process_order(request):
             state = data['shipping']['state'],
             zipcode = data['shipping']['zipcode']
         )
+
     return JsonResponse('Payment was done', safe=False)
-'''
-@csrf_protect
-def update_item(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            product_id = data.get('product_id')
-            action = data.get('action')
-            print('Action:', action)
-            print('Product:', product_id)
-            
-            # Return a JSON response with a success message
-            return JsonResponse({'message': 'Item was updated successfully'}, status=200)
-        except json.JSONDecodeError as e:
-            # Handle JSON decoding error
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-    else:
-        # Handle invalid request method
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
-'''
