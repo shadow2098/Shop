@@ -145,9 +145,19 @@ def process_order(request):
         order.complete = True
         order.save()
 
-    if order.shipping == True:
+    if order.shipping == True and request.user.is_authenticated:
         ShippingAddress.objects.create(
             customer = customer,
+            order = order,
+            address = data['shipping']['address'],
+            city = data['shipping']['city'],
+            state = data['shipping']['state'],
+            zipcode = data['shipping']['zipcode']
+        )
+
+    else:
+        ShippingAddress.objects.create(
+            guest = customer,
             order = order,
             address = data['shipping']['address'],
             city = data['shipping']['city'],
