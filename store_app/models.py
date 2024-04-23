@@ -31,10 +31,10 @@ password
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    username = models.CharField(max_length=200, null=False)
-    email = models.CharField(max_length=200, null=False)
-    password = models.CharField(max_length=200, null=False)
-    gender = models.CharField(max_length=20, null=True, blank=True)
+    _username = models.CharField(max_length=200, null=False)
+    _email = models.CharField(max_length=200, null=False)
+    _password = models.CharField(max_length=200, null=False)
+    _gender = models.CharField(max_length=20, null=True, blank=True)
 
 
     def __str__(self):

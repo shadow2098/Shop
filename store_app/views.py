@@ -37,10 +37,10 @@ def process_account(request):
         email = data['email']
         gender = data['gender']
 
-        customer, account_status = Customer.objects.get_or_create(username=username)
+        customer, account_status = Customer.objects.get_or_create(_username=username)
 
         if account_status == True:
-            new_user = Customer.create_new_user(username=username, email=email, password=password)
+            new_user = Customer.create_new_user(_username=username, _email=email, _password=password)
             new_user = authenticate(username=username, email=email, password=password)
             customer.user = new_user
             customer.save()
@@ -52,7 +52,7 @@ def process_account(request):
         password = data['password']
         username = data['username']
 
-        customer, account_status = Customer.objects.get_or_create(username=username)
+        customer, account_status = Customer.objects.get_or_create(_username=username)
         if account_status == False:
             customer.user.check_password(password)
             login(request, customer.user)
