@@ -62,7 +62,8 @@
             'username': null,
             'email': null,
             'password': null,
-            'gender': null
+            'gender': null,
+            'action': 'sign_up',
         };
 
         user_data.username = form.username.value;
@@ -70,7 +71,7 @@
         user_data.password = form.password.value;
         user_data.gender = form.gender.value;
 
-        var url_name = 'http://127.0.0.1:8000/process_sign_up/';
+        var url_name = 'http://127.0.0.1:8000/process_account/';
 
         fetch(url_name, {
                 method: 'POST',

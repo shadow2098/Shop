@@ -16,8 +16,10 @@ from .utils import cookie_cart, cart_data, anonymous_order
 def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})
 
+
 def return_sign_up(request):
     return render(request, 'store_app/sign_up.html', {})
+
 
 def log_out(request):
     logout(request)
@@ -25,25 +27,39 @@ def log_out(request):
 
 
 @csrf_exempt
-def process_sign_up(request):
+def process_account(request):
     data = json.loads(request.body.decode('utf-8'))
-    password = data['password']
-    username = data['username']
-    email = data['email']
-    gender = data['gender']
+    action = data['action']
 
-    customer, account_status = Customer.objects.get_or_create(username=username)
+    if action == 'sign_up':
+        password = data['password']
+        username = data['username']
+        email = data['email']
+        gender = data['gender']
 
-    if account_status == True:
-        new_user = Customer.create_new_user(username=username, email=email, password=password)
-        new_user = authenticate(username=username, email=email, password=password)
-        customer.user = new_user
-        customer.save()
-        login(request, new_user)
-    else:
-        print("Sorry the username or email is taken")
+        customer, account_status = Customer.objects.get_or_create(username=username)
 
-    return JsonResponse('sign_up was done', safe=False)
+        if account_status == True:
+            new_user = Customer.create_new_user(username=username, email=email, password=password)
+            new_user = authenticate(username=username, email=email, password=password)
+            customer.user = new_user
+            customer.save()
+            login(request, new_user)
+        else:
+            print("Sorry the username or email is taken")
+
+    elif action == 'log_in':
+        password = data['password']
+        username = data['username']
+
+        customer, account_status = Customer.objects.get_or_create(username=username)
+        if account_status == False:
+            customer.user.check_password(password)
+            login(request, customer.user)
+        else:
+            print("Sorry the username or password is incorrect")
+
+    return JsonResponse('User is logged in was done', safe=False)
 
 
 
