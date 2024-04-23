@@ -2,34 +2,30 @@
 {% load static %}
 {% block content %}
 
-     <div class="row">
-        <div class="col-lg-10">
-            <div class="log_in-box-element" id="form-wrapper">
-                <form id="form">
-                    <div id="user-info">
-                        <p>Enter either one or both</p>
-                        <div class="form-field">
-                            <input required class="form-control" type="text" name="username" placeholder="Username...">
-                        </div>
-                        <div class="form-field">
-                            <input required class="form-control" type="email" name="email" placeholder="Email...">
-                        </div>
-                        <hr>
-                        <p>Password:</p>
-                        <hr>
-                        <div class="form-field">
-                            <input required class="form-control" type="text" name="password" placeholder="Password...">
-                        </div>
+<div class="row">
+    <div class="col-lg-10">
+        <div class="log_in-box-element" id="form-wrapper">
+            <form id="form">
+                <div id="user-info">
+                    <p>Log in</p>
+                    <div class="form-field">
+                        <input required class="form-control" type="text" name="username" placeholder="Username...">
                     </div>
+                    <div class="form-field">
+                        <input required class="form-control" type="password" name="password" placeholder="Password...">
                     </div>
-                    <br>
-                    <input id="form-button" class="log-in-btn btn-success btn-block" type="submit" value="Continue">
-                    <hr>
-                        <a class="box-element" class="box-element" href="http://127.0.0.1:8000/sign_up">Don't have account? -Sign up!</a>
-                    <br>
-                    <br>
-                    <a class="box-element" href="http://127.0.0.1:8000/">Back to shopping without an account</a>
-                </form>
-            </div>
+                </div>
+                <br>
+                <input id="form-button" class="log-in-btn btn-success btn-block" type="submit" value="Continue" style="margin-left: 2px;">
+            </form>
+            
+            <hr>
+            <a class="box-element" href="http://127.0.0.1:8000/sign_up">Don't have an account? -Sign up!</a>
+            <br>
+            <br>
+            <a class="box-element" href="http://127.0.0.1:8000/">Back to shopping without an account</a>
         </div>
+    </div>
+</div>
+
 {% endblock content %}
