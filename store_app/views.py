@@ -4,6 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 import json
 import datetime
+from itertools import chain
+from django.shortcuts import redirect
 
 
 from .models import *
@@ -12,6 +14,28 @@ from .utils import cookie_cart, cart_data, anonymous_order
 
 #print('check with true password', customer.user.check_password(password))
 #logout(request)
+
+def export_all_usernames(request):
+    customer_list = Customer.objects.all()
+    guest_list = Guest.objects.all()
+
+    result_list = chain(customer_list, guest_list)
+
+    i = 0
+    customer_len = len(list(customer_list))
+
+    f = open('store_app/templates/store_app/usernames.txt', 'w')
+    f.write('Customers:\n')
+    for obj in result_list:
+        i += 1
+        if i == customer_len:
+            f.write('Guests:\n')
+        f.write('   ' + str(obj._username) + '\n')
+        f.write('\n')
+
+    f.close()
+    from django.shortcuts import redirect
+    return redirect('/usernames.txt/')
 
 def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})

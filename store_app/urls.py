@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 from . import views
 
 
@@ -12,4 +13,6 @@ urlpatterns = [
     path('process_account/', views.process_account, name='process_account'),
     path('update_item/', views.update_item, name='update_item'),
     path('process_order/', views.process_order, name='process_order'),
+    path('export/', views.export_all_usernames, name='export'),
+    path('usernames.txt/', TemplateView.as_view(template_name='store_app/usernames.txt', content_type='text/plain')),
 ]
