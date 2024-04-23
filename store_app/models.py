@@ -11,11 +11,11 @@ class AbstracClass(models.Model):
 
 
 class Guest(AbstracClass):
-    _guest_username = models.CharField(max_length=200, null=False)
-    _guest_email = models.CharField(max_length=200, null=False)
+    _username = models.CharField(max_length=200, null=False)
+    _email = models.CharField(max_length=200, null=False)
 
     def return_name(self):
-        return self._guest_username
+        return self._username
 
 class Customer(AbstracClass):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
