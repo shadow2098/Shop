@@ -6,24 +6,26 @@
         <div class="log_in-box-element" id="form-wrapper">
             <form id="form">
                 <div id="user-info">
-                    <p>Log in</p>
+                    <p>Required Information to become a seller:</p>
                     <div class="form-field">
                         <input required class="form-control" type="text" name="username" placeholder="Username...">
                     </div>
                     <div class="form-field">
-                        <input required class="form-control" type="password" name="password" placeholder="Password...">
+                        <input required class="form-control" type="email" name="email" placeholder="Email...">
+                    </div>
+                    <div class="form-field">
+                        <input required class="form-control" type="text" name="password" placeholder="Password...">
                     </div>
                 </div>
                 <br>
-                <input id="form-button" class="log-in-btn btn-success btn-block" type="submit" value="Continue" style="margin-left: 2px;">
+                <input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
             </form>
-            
             <hr>
-            <a class="box-element" href="http://127.0.0.1:8000/sign_up/">Don't have an account? -Sign up!</a>
+            <a class="box-element" href="http://127.0.0.1:8000/seller_log_in">Already have a seller account? -Log in!</a>
             <br><br>
-            <a class="box-element" href="http://127.0.0.1:8000/seller_log_in/">Log in as a seller</a>
+            <a class="box-element" href="http://127.0.0.1:8000/sign_up/">Sign up as a customer</a>
             <br><br>
-            <a class="box-element" href="http://127.0.0.1:8000/">Back to shopping without an account</a>
+            <a class="box-element" href="http://127.0.0.1:8000/">Back to the home page</a>
         </div>
     </div>
 </div>
@@ -43,12 +45,14 @@
 
         var user_data = {
             'username': null,
+            'email': null,
             'password': null,
-            'seller': 'no',
-            'action': 'log_in',
+            'seller': 'yes',
+            'action': 'sign_up',
         };
 
         user_data.username = form.username.value;
+        user_data.email = form.email.value;
         user_data.password = form.password.value;
 
         var url_name = 'http://127.0.0.1:8000/process_account/';
@@ -57,7 +61,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken // Make sure you define csrftoken
+                    'X-CSRFToken': csrftoken,
                 },
                 body: JSON.stringify(user_data)
             })
@@ -72,10 +76,7 @@
             .then(data => {
                 console.log('Response from server:', data);
 
-                alert('You are logged in');
-                // cart = {}
-                // document.cookie = 'cart=' + JSON.stringify(cart) + ';domain=;path=/'
-                // console.log("CART IS CLEARED")
+                alert('Seller account created');
                 window.location.href = "http://127.0.0.1:8000/";
             })
             .catch(error => {

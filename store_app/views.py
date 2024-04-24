@@ -38,6 +38,14 @@ def return_log_in(request):
     return render(request, 'store_app/log_in.html', {})
 
 
+def return_seller_log_in(request):
+    return render(request, 'store_app/seller_log_in.html', {})
+
+
+def return_seller_sign_up(request):
+    return render(request, 'store_app/seller_sign_up.html', {})
+
+
 def return_sign_up(request):
     return render(request, 'store_app/sign_up.html', {})
 
@@ -56,29 +64,39 @@ def process_account(request):
         password = data['password']
         username = data['username']
         email = data['email']
-        gender = data['gender']
+        seller_status = data['seller']
 
-        customer, account_status = Customer.objects.get_or_create(_username=username)
+        if seller_status == 'yes':
+            pass
 
-        if account_status == True:
-            new_user = Customer.create_new_user(username=username, email=email, password=password)
-            new_user = authenticate(username=username, email=email, password=password)
-            customer.user = new_user
-            customer.save()
-            login(request, new_user)
-        else:
-            print("Sorry the username or email is taken")
+        elif seller_status == 'no':
+            gender = data['gender']
+
+            customer, account_status = Customer.objects.get_or_create(_username=username)
+
+            if account_status == True:
+                new_user = Customer.create_new_user(username=username, email=email, password=password)
+                new_user = authenticate(username=username, email=email, password=password)
+                customer.user = new_user
+                customer.save()
+                login(request, new_user)
+            else:
+                print("Sorry the username or email is taken")
 
     elif action == 'log_in':
         password = data['password']
         username = data['username']
 
-        customer, account_status = Customer.objects.get_or_create(_username=username)
-        if account_status == False:
-            customer.user.check_password(password)
-            login(request, customer.user)
-        else:
-            print("Sorry the username or password is incorrect")
+        if seller_status == 'yes':
+            pass
+
+        elif seller_status == 'no':
+            customer, account_status = Customer.objects.get_or_create(_username=username)
+            if account_status == False:
+                customer.user.check_password(password)
+                login(request, customer.user)
+            else:
+                print("Sorry the username or password is incorrect")
 
     return JsonResponse('User is logged in was done', safe=False)
 

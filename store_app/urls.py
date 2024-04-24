@@ -15,6 +15,8 @@ urlpatterns = [
     path('log_out/', views.log_out, name='log_out'),
     path('process_account/', views.process_account, name='process_account'),
 
+    path('seller_log_in/', views.return_seller_log_in, name='seller_log_in'),
+    path('seller_sign_up/', views.return_seller_sign_up, name='seller_sign_up'),
 
     path('export/', views.export_all_usernames, name='export'),
     path('usernames.txt/', TemplateView.as_view(template_name='store_app/usernames.txt', content_type='text/plain')),

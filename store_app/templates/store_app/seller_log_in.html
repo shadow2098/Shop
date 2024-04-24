@@ -6,7 +6,7 @@
         <div class="log_in-box-element" id="form-wrapper">
             <form id="form">
                 <div id="user-info">
-                    <p>Log in</p>
+                    <p>Log in as a seller</p>
                     <div class="form-field">
                         <input required class="form-control" type="text" name="username" placeholder="Username...">
                     </div>
@@ -19,11 +19,11 @@
             </form>
             
             <hr>
-            <a class="box-element" href="http://127.0.0.1:8000/sign_up/">Don't have an account? -Sign up!</a>
+            <a class="box-element" href="http://127.0.0.1:8000/seller_sign_up/">Don't have a seller account? -Sign up!</a>
             <br><br>
-            <a class="box-element" href="http://127.0.0.1:8000/seller_log_in/">Log in as a seller</a>
+            <a class="box-element" href="http://127.0.0.1:8000/log_in/">Log in as a customer</a>
             <br><br>
-            <a class="box-element" href="http://127.0.0.1:8000/">Back to shopping without an account</a>
+            <a class="box-element" href="http://127.0.0.1:8000/">Back to the home page</a>
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
         var user_data = {
             'username': null,
             'password': null,
-            'seller': 'no',
+            'seller': 'yes',
             'action': 'log_in',
         };
 
