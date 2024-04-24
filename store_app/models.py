@@ -13,6 +13,7 @@ class AbstracClass(models.Model):
 class Guest(AbstracClass):
     _username = models.CharField(max_length=200, null=False)
     _email = models.CharField(max_length=200, null=False)
+    is_a_seller = False
 
 
     def return_name(self):
@@ -24,6 +25,7 @@ class Customer(AbstracClass):
     _email = models.CharField(max_length=200, null=False)
     _password = models.CharField(max_length=200, null=False)
     _gender = models.CharField(max_length=20, null=True, blank=True)
+    is_a_seller = False
 
 
     def return_name(self):
@@ -33,6 +35,18 @@ class Customer(AbstracClass):
     def create_new_user(username, email, password):
         new_user = User.objects.create_user(username=username, email=email, password=password)
         return new_user
+
+
+class Seller(AbstracClass):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    _username = models.CharField(max_length=200, null=False)
+    _email = models.CharField(max_length=200, null=False)
+    _password = models.CharField(max_length=200, null=False)
+    is_a_seller = True
+
+
+    def return_name(self):
+        return self.name
 
 
 class Product(AbstracClass):
