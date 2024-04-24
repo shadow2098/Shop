@@ -27,7 +27,6 @@ class Customer(AbstracClass):
     _gender = models.CharField(max_length=20, null=True, blank=True)
     is_a_seller = False
 
-
     def return_name(self):
         return self._username
 
@@ -39,6 +38,7 @@ class Customer(AbstracClass):
 
 class Seller(AbstracClass):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    my_products = models.CharField(max_length=200, null=True)
     _username = models.CharField(max_length=200, null=False)
     _email = models.CharField(max_length=200, null=False)
     _password = models.CharField(max_length=200, null=False)
@@ -48,6 +48,10 @@ class Seller(AbstracClass):
     def return_name(self):
         return self.name
 
+    @staticmethod
+    def create_new_user(username, email, password):
+        new_user = User.objects.create_user(username=username, email=email, password=password)
+        return new_user
 
 class Product(AbstracClass):
     name = models.CharField(max_length=200, null=True)
