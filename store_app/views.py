@@ -15,11 +15,12 @@ from .models import *
 
 @login_required
 def add_product(request):
-    # if not request.user.is_authenticated or not hasattr(request.user, 'seller'):
-    #     return HttpResponseForbidden("You do not have permission to access this page.")
-    
-    # If the user is a seller, render the page
-    return render(request, 'store_app/add_product.html')
+    try:
+        if request.user.seller.is_a_seller:
+            return render(request, 'store_app/add_product.html')
+
+    except:
+        return render(request, 'store_app/cannot_enter_customer.html')
 
 @csrf_exempt
 def add_product_process(request):
@@ -93,7 +94,7 @@ def return_seller_sign_up(request):
 def return_sign_up(request):
     return render(request, 'store_app/sign_up.html', {})
 
-
+@login_required
 def log_out(request):
     logout(request)
     return return_store(request)
@@ -174,13 +175,16 @@ def return_store(request):
     try:
         if request.user.seller.is_a_seller:
             my_str = request.user.seller.my_products
-            product_id_list = my_str.split(' ')
-            product_id_list.pop(-1)
-            my_product_list = []
-            for i in range(len(product_id_list)):
-                query_list.append((Product.objects.get(id=product_id_list[i])))
+            if my_str is None:
+                context = {}
+            else:
+                product_id_list = my_str.split(' ')
+                product_id_list.pop(-1)
+                my_product_list = []
+                for i in range(len(product_id_list)):
+                    my_product_list.append((Product.objects.get(id=product_id_list[i])))
 
-            context = {'products': query_list}
+                context = {'products': my_product_list}
             return render(request, 'store_app/store.html', context)
 
     except:
@@ -193,25 +197,33 @@ def return_store(request):
 
 
 def return_shopping_cart(request):
-    data = cart_data(request)
+    try:
+        if request.user.seller.is_a_seller:
+            return render(request, 'store_app/cannot_enter_seller.html')
+    except:
+        data = cart_data(request)
 
-    shopping_cart_items = data['shopping_cart_items']
-    items = data['items']
-    order = data['order']
+        shopping_cart_items = data['shopping_cart_items']
+        items = data['items']
+        order = data['order']
 
-    context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
-    return render(request, 'store_app/shopping_cart.html', context)
+        context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
+        return render(request, 'store_app/shopping_cart.html', context)
 
 
 def return_checkout(request):
-    data = cart_data(request)
+    try:
+        if request.user.seller.is_a_seller:
+            return render(request, 'store_app/cannot_enter_seller.html')
+    except:
+        data = cart_data(request)
 
-    shopping_cart_items = data['shopping_cart_items']
-    items = data['items']
-    order = data['order']
+        shopping_cart_items = data['shopping_cart_items']
+        items = data['items']
+        order = data['order']
 
-    context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
-    return render(request, 'store_app/checkout.html', context)
+        context = {'items': items, 'order': order, 'shopping_cart_items': shopping_cart_items}
+        return render(request, 'store_app/checkout.html', context)
 
 
 @csrf_exempt
