@@ -61,7 +61,7 @@ class Product(AbstracClass):
     name = models.CharField(max_length=200, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=False)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to="static/store_app/images/")
 
 
     def return_name(self):
