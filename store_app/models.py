@@ -33,6 +33,8 @@ class Customer(AbstracClass):
     @staticmethod
     def create_new_user(username, email, password):
         new_user = User.objects.create_user(username=username, email=email, password=password)
+        new_user.last_name = 'not_seller'
+        new_user.save()
         return new_user
 
 
@@ -51,6 +53,8 @@ class Seller(AbstracClass):
     @staticmethod
     def create_new_user(username, email, password):
         new_user = User.objects.create_user(username=username, email=email, password=password)
+        new_user.last_name = 'seller'
+        new_user.save()
         return new_user
 
 class Product(AbstracClass):

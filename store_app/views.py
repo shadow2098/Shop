@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from itertools import chain
 
 
@@ -11,6 +12,18 @@ import json
 from .utils import cookie_cart, cart_data, anonymous_order
 from .models import *
 
+@login_required
+def add_product(request):
+    if not request.user.is_authenticated or not hasattr(request.user, 'seller'):
+        return HttpResponseForbidden("You do not have permission to access this page.")
+    
+    # If the user is a seller, render the page
+    return render(request, 'store_app/add_product.html')
+
+
+@csrf_exempt
+def add_product_process(request):
+    pass
 
 def export_all_usernames(request):
     customer_list = Customer.objects.all()
@@ -59,15 +72,26 @@ def log_out(request):
 def process_account(request):
     data = json.loads(request.body.decode('utf-8'))
     action = data['action']
+    seller_status = data['seller']
+
 
     if action == 'sign_up':
         password = data['password']
         username = data['username']
         email = data['email']
-        seller_status = data['seller']
 
         if seller_status == 'yes':
-            pass
+            seller, account_status = Seller.objects.get_or_create(_username=username)
+
+            if account_status == True:
+                new_user = Seller.create_new_user(username=username, email=email, password=password)
+                new_user = authenticate(username=username, email=email, password=password, last_name='seller')
+                seller.user = new_user
+                seller.save()
+                login(request, new_user)
+            else:
+                print("Sorry the username or email is taken")
+
 
         elif seller_status == 'no':
             gender = data['gender']
@@ -76,8 +100,10 @@ def process_account(request):
 
             if account_status == True:
                 new_user = Customer.create_new_user(username=username, email=email, password=password)
-                new_user = authenticate(username=username, email=email, password=password)
+                new_user = authenticate(username=username, email=email, password=password, last_name='not_seller')
                 customer.user = new_user
+                customer.save()
+                customer._gender = gender
                 customer.save()
                 login(request, new_user)
             else:
@@ -88,12 +114,20 @@ def process_account(request):
         username = data['username']
 
         if seller_status == 'yes':
-            pass
+            seller, account_status = Seller.objects.get_or_create(_username=username)
+            if account_status == False:
+                print("HELLLLLLLLLLLOOOOOOOO")
+                seller.user.check_password(password)
+                seller.user = authenticate(username=username, password=password, last_name='seller')
+                login(request, seller.user)
+            else:
+                print("Sorry the username or password is incorrect")
 
         elif seller_status == 'no':
             customer, account_status = Customer.objects.get_or_create(_username=username)
             if account_status == False:
                 customer.user.check_password(password)
+                customer.user = authenticate(username=username, password=password, last_name='not_seller')
                 login(request, customer.user)
             else:
                 print("Sorry the username or password is incorrect")
@@ -103,12 +137,20 @@ def process_account(request):
 
 
 def return_store(request):
-    data = cart_data(request)
-    shopping_cart_items = data['shopping_cart_items']
-    products = Product.objects.all()
+    try:
+        if request.user.seller.is_a_seller:
+            print("HELLLLLOOO")
+            print(request.user.seller._username)
+            #context = {'products': products}
+            return render(request, 'store_app/store.html', {})
 
-    context = {'products': products, 'shopping_cart_items': shopping_cart_items}
-    return render(request, 'store_app/store.html', context)
+    except:
+        data = cart_data(request)
+        shopping_cart_items = data['shopping_cart_items']
+        products = Product.objects.all()
+
+        context = {'products': products, 'shopping_cart_items': shopping_cart_items}
+        return render(request, 'store_app/store.html', context)
 
 
 def return_shopping_cart(request):
