@@ -59,19 +59,22 @@ def add_product_process(request):
 def export_all_usernames(request):
     customer_list = Customer.objects.all()
     guest_list = Guest.objects.all()
-    print(guest_list)
+    seller_list = Seller.objects.all()
 
-    result_list = chain(customer_list, guest_list)
+    result_list = chain(customer_list, guest_list, seller_list)
 
     i = 0
-    customer_len = len(list(customer_list))
+    c_len = len(list(customer_list))
+    g_c_len = c_len + len(list(seller_list))
 
     f = open('store_app/templates/store_app/usernames.txt', 'w')
     f.write('Customers:\n')
     for obj in result_list:
         i += 1
-        if i == customer_len:
+        if i == c_len:
             f.write('Guests:\n')
+        if i == g_c_len:
+            f.write('Sellers:\n')
         f.write('   ' + str(obj._username) + '\n')
         f.write('\n')
 
