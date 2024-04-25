@@ -123,7 +123,6 @@ def process_account(request):
             else:
                 print("Sorry the username or email is taken")
 
-
         elif seller_status == 'no':
             gender = data['gender']
 
@@ -140,6 +139,7 @@ def process_account(request):
             else:
                 print("Sorry the username or email is taken")
 
+
     elif action == 'log_in':
         password = data['password']
         username = data['username']
@@ -147,19 +147,22 @@ def process_account(request):
         if seller_status == 'yes':
             seller, account_status = Seller.objects.get_or_create(_username=username)
             if account_status == False:
-                print("HELLLLLLLLLLLOOOOOOOO")
-                seller.user.check_password(password)
-                seller.user = authenticate(username=username, password=password, last_name='seller')
-                login(request, seller.user)
+                if seller.user.check_password(password):
+                    seller.user = authenticate(username=username, password=password, last_name='seller')
+                    login(request, seller.user)
+                else:
+                    print("Sorry wrong password or username")
             else:
                 print("Sorry the username or password is incorrect")
 
         elif seller_status == 'no':
             customer, account_status = Customer.objects.get_or_create(_username=username)
             if account_status == False:
-                customer.user.check_password(password)
-                customer.user = authenticate(username=username, password=password, last_name='not_seller')
-                login(request, customer.user)
+                if customer.user.check_password(password):
+                    customer.user = authenticate(username=username, password=password, last_name='not_seller')
+                    login(request, customer.user)
+                else:
+                    print("Sorry wrong password or username")
             else:
                 print("Sorry the username or password is incorrect")
 
