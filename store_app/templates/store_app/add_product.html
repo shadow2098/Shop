@@ -3,22 +3,23 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-lg-6">
-        <form id="product-form" method="POST" enctype="multipart/form-data">
+    <div class="col-lg-10">
+        <div class="log_in-box-element" id="form-wrapper">
+            <form enctype="multipart/form-data" id="form">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="form-field">
                 <label for="name">Name:</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
             </div>
-            <div class="form-group">
+            <div class="form-field">
                 <label for="price">Price:</label>
                 <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
             </div>
-            <div class="form-group">
+            <div class="form-field">
                 <label for="digital">Digital:</label>
                 <input type="checkbox" id="digital" name="digital">
             </div>
-            <div class="form-group">
+            <div class="form-field">
                 <label for="image">Image:</label>
                 <input type="file" class="form-control-file" id="image" name="image" accept="image/jpeg,image/jpg,image/png" required>
                 <small id="imageHelp" class="form-text text-muted">Accepted file types: JPEG, JPG, PNG</small>
@@ -27,11 +28,10 @@
         </form>
     </div>
 </div>
+    </div>
 
-{% endblock content %}
-
-<script>
-    var form = document.getElementById('product-form');
+<script type="text/javascript">
+    var form = document.getElementById('form');
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -40,16 +40,27 @@
     });
 
     function submit_form_data() {
-        var formData = new FormData(form);
+        var product_data = {
+            'name': null,
+            'price': null,
+            'digital': null,
+            'image': null,
+        };
+
+        product_data.name = form.name.value;
+        product_data.price = form.price.value;
+        product_data.digital = form.digital.value;
+        product_data.image = form.image.value;
 
         var url_name = 'http://127.0.0.1:8000/add_product_process/';
 
         fetch(url_name, {
             method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}' // Using Django template tag to get CSRF token
-            },
-            body: formData
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken // Make sure you define csrftoken
+                },
+            body: JSON.stringify(product_data)
         })
         .then(response => {
             if (response.ok) {
@@ -68,3 +79,5 @@
         });
     }
 </script>
+
+{% endblock content %}

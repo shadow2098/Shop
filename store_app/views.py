@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import JsonResponse, HttpResponseForbidden
 from itertools import chain
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 import datetime
@@ -14,20 +15,50 @@ from .models import *
 
 @login_required
 def add_product(request):
-    if not request.user.is_authenticated or not hasattr(request.user, 'seller'):
-        return HttpResponseForbidden("You do not have permission to access this page.")
+    # if not request.user.is_authenticated or not hasattr(request.user, 'seller'):
+    #     return HttpResponseForbidden("You do not have permission to access this page.")
     
     # If the user is a seller, render the page
     return render(request, 'store_app/add_product.html')
 
-
 @csrf_exempt
 def add_product_process(request):
-    pass
+    data = json.loads(request.body.decode('utf-8'))
+    name = data['name']
+    price = data['price']
+    digital = False
+    image = data['image']
+    print(image)
+
+    print("HJHVHS   JHDH    BHBJ    BDHJDBJQJHJBQJDBQ")
+    if digital is None:
+        digital = False
+
+    product = Product.objects.create(
+        name=name,
+        price=price,
+        digital=digital,
+        image=image
+    )
+    product.save()
+
+    if hasattr(request.user, 'seller'):
+        seller = request.user.seller
+        if seller.my_products:
+            seller.my_products += str(product.id) + ' '
+        else:
+            seller.my_products = str(product.id) + ' '
+        seller.save()
+
+        return JsonResponse({'success': True})
+
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 def export_all_usernames(request):
     customer_list = Customer.objects.all()
     guest_list = Guest.objects.all()
+    print(guest_list)
 
     result_list = chain(customer_list, guest_list)
 
@@ -139,10 +170,15 @@ def process_account(request):
 def return_store(request):
     try:
         if request.user.seller.is_a_seller:
-            print("HELLLLLOOO")
-            print(request.user.seller._username)
-            #context = {'products': products}
-            return render(request, 'store_app/store.html', {})
+            my_str = request.user.seller.my_products
+            product_id_list = my_str.split(' ')
+            product_id_list.pop(-1)
+            my_product_list = []
+            for i in range(len(product_id_list)):
+                query_list.append((Product.objects.get(id=product_id_list[i])))
+
+            context = {'products': query_list}
+            return render(request, 'store_app/store.html', context)
 
     except:
         data = cart_data(request)
