@@ -15,7 +15,6 @@ class Guest(AbstracClass):
     _email = models.CharField(max_length=200, null=False)
     is_a_seller = False
 
-
     def return_name(self):
         return self._username
 
@@ -46,7 +45,6 @@ class Seller(AbstracClass):
     _password = models.CharField(max_length=200, null=False)
     is_a_seller = True
 
-
     def return_name(self):
         return self.name
 
@@ -57,12 +55,12 @@ class Seller(AbstracClass):
         new_user.save()
         return new_user
 
+
 class Product(AbstracClass):
     name = models.CharField(max_length=200, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=False)
     image = models.ImageField(null=True, blank=True, upload_to="static/store_app/images/")
-
 
     def return_name(self):
         return self.name
@@ -82,7 +80,6 @@ class Order(models.Model) :
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)
-
 
     def _str__(self):
         return str(self.id)
@@ -124,7 +121,6 @@ class OrderItem(models.Model) :
     quantity = models. IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
-
     @property
     def get_total(self):
         total = self.product.price * self.quantity
@@ -140,7 +136,6 @@ class ShippingAddress (models.Model):
     state = models. CharField(max_length=200, null=False)
     zipcode = models. CharField(max_length=200, null=False)
     date_added = models.DateTimeField(auto_now_add=True)
-
 
     def __str__(self):
         return self.address

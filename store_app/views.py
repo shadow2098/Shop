@@ -1,10 +1,12 @@
-from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
-from django.http import JsonResponse, HttpResponseForbidden
-from itertools import chain
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import JsonResponse, HttpResponseForbidden
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect, render
+
+
+from itertools import chain
 
 
 import datetime
@@ -12,6 +14,7 @@ import json
 
 from .utils import cookie_cart, cart_data, anonymous_order
 from .models import *
+
 
 @login_required
 def add_product(request):
@@ -29,11 +32,6 @@ def add_product_process(request):
     price = data['price']
     digital = False
     image = data['image']
-    print(image)
-
-    print("HJHVHS   JHDH    BHBJ    BDHJDBJQJHJBQJDBQ")
-    if digital is None:
-        digital = False
 
     product = Product.objects.create(
         name=name,
@@ -108,7 +106,6 @@ def process_account(request):
     data = json.loads(request.body.decode('utf-8'))
     action = data['action']
     seller_status = data['seller']
-
 
     if action == 'sign_up':
         password = data['password']

@@ -1,34 +1,33 @@
 {% extends 'store_app/main.html' %}
 {% load static %}
 {% block content %}
-
 <div class="row">
     <div class="col-lg-10">
         <div class="log_in-box-element" id="form-wrapper">
             <form enctype="multipart/form-data" id="form">
-            {% csrf_token %}
-            <div class="form-field">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
-            </div>
-            <div class="form-field">
-                <label for="price">Price:</label>
-                <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
-            </div>
-            <div class="form-field">
-                <label for="digital">Digital:</label>
-                <input type="checkbox" id="digital" name="digital">
-            </div>
-            <div class="form-field">
-                <label for="image">Image:</label>
-                <input type="file" class="form-control-file" id="image" name="image" accept="image/jpeg,image/jpg,image/png" required>
-                <small id="imageHelp" class="form-text text-muted">Accepted file types: JPEG, JPG, PNG</small>
-            </div>
-            <input id="form-button" class="log-in-btn btn-success btn-block" type="submit" value="Continue" style="margin-left: 2px;">
-        </form>
+                <div class="form-field">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
+                </div>
+                <div class="form-field">
+                    <label for="price">Price:</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" required>
+                </div>
+                <div class="form-field">
+                    <label for="digital">Digital:</label>
+                    <input type="checkbox" id="digital" name="digital">
+                </div>
+                <div class="form-field">
+                    <label for="image">Image:</label>
+                    <input type="file" class="form-control-file" id="image" name="image" accept="image/jpeg,image/jpg,image/png" required>
+                    <small id="imageHelp" class="form-text text-muted">Accepted file types: JPEG, JPG, PNG</small>
+                </div>
+                <input id="form-button" class="log-in-btn btn-success btn-block" type="submit" value="Continue" style="margin-left: 2px;">
+            </form>
+        </div>
     </div>
 </div>
-    </div>
+
 
 <script type="text/javascript">
     var form = document.getElementById('form');
