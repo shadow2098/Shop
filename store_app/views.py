@@ -117,7 +117,7 @@ def process_account(request):
 
             if account_status == True:
                 new_user = Seller.create_new_user(username=username, email=email, password=password)
-                new_user = authenticate(username=username, email=email, password=password, last_name='seller')
+                new_user = thentauicate(username=username, email=email, password=password, last_name='seller')
                 seller.user = new_user
                 seller.save()
                 login(request, new_user)
