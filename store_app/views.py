@@ -5,15 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 
-
 from itertools import chain
-
 
 import datetime
 import json
 
+from .models import Guest, Customer, Seller, Product, Order, OrderItem, ShippingAddress
 from .utils import cookie_cart, cart_data, anonymous_order
-from .models import *
 
 
 @login_required
@@ -53,6 +51,7 @@ def add_product_process(request):
 
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
+
 
 def export_all_usernames(request):
     customer_list = Customer.objects.all()
@@ -140,7 +139,6 @@ def process_account(request):
             else:
                 print("Sorry the username or email is taken")
 
-
     elif action == 'log_in':
         password = data['password']
         username = data['username']
@@ -168,7 +166,6 @@ def process_account(request):
                 print("Sorry the username or password is incorrect")
 
     return JsonResponse('User is logged in was done', safe=False)
-
 
 
 def return_store(request):

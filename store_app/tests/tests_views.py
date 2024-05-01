@@ -5,6 +5,7 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
+
 import json
 import uuid
 
