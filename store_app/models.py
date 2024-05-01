@@ -46,7 +46,7 @@ class Seller(AbstracClass):
     is_a_seller = True
 
     def return_name(self):
-        return self.name
+        return self._username
 
     @staticmethod
     def create_new_user(username, email, password):
