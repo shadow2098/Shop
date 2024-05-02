@@ -36,3 +36,8 @@ store_app/views.py line 56 is a function where we treat Guest, Customer, and Sel
 
 ### Decorator
 Different decorators are used throughout store_app/views.py
+
+# Future prospects
+Fix the issue that picture is not visible when seller uploads the product.  
+Fix up the javascript code to be less primitive.  
+Add few new html pages so that user interaction is more fluent.
