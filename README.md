@@ -41,3 +41,26 @@ Different decorators are used throughout store_app/views.py
 Fix the issue that picture is not visible when seller uploads the product.  
 Fix up the javascript code to be less primitive.  
 Add few new html pages so that user interaction is more fluent.
+
+## Links that may be usefull when reading the code
+https://getbootstrap.com/
+https://getbootstrap.com/docs/4.0/components/navbar/#supported-content
+https://github.com/divanov11/ecom_steps/blob/master/prt6_stp3_main.html
+@property - makes a method be accessible as an attribute
+https://docs.djangoproject.com/en/4.2/howto/csrf/
+https://support.stripe.com/questions/how-to-fix-syntaxerror-unexpected-token-in-json-at-position-0
+https://stackoverflow.com/questions/987142/make-gitignore-ignore-everything-except-a-few-files
+https://stackoverflow.com/questions/17312831/what-does-request-user-refer-to-in-django
+https://stackoverflow.com/questions/3644902/how-to-check-if-a-user-is-logged-in-how-to-properly-use-user-is-authenticated
+https://stackoverflow.com/questions/10622199/how-to-retrieve-password-in-django
+https://stackoverflow.com/questions/3222549/how-to-automatically-login-a-user-after-registration-in-django
+https://stackoverflow.com/questions/25251719/how-can-i-logout-a-user-in-django
+https://stackoverflow.com/questions/4898408/how-to-set-a-login-cookie-in-django
+https://stackoverflow.com/questions/14503062/how-do-i-serve-a-text-file-from-django
+https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
+https://stackoverflow.com/questions/431628/how-to-combine-multiple-querysets-in-django
+https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder
+https://stackoverflow.com/questions/24575680/new-lines-inside-paragraph-in-readme-md
+https://stackoverflow.com/questions/3828554/how-to-allow-input-type-file-to-accept-only-image-files
+https://blog.hubspot.com/website/opacity-css#:~:text=To%20set%20the%20opacity%20of,invisible).
+https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
