@@ -25,9 +25,8 @@ MEDIA_ROOT = BASE_DIR / 'store_app/static/store_app/images'
 SECRET_KEY = 'django-insecure-d9hjm!lf6_y@igd^@vw#(fl0@ba&z#1rl4hgko0joevpj8o60!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
