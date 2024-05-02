@@ -21,3 +21,18 @@ And fill out the form for the product creation.
 ***Important note: If you plan to add products this way, you will NOT be able to see images attached to the products***
 
 Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Log in as seller" -> Click sign up as seller. After that go to http://127.0.0.1:8000/add_product/ and fill out the form. You should be able to see you product apprear in the catalog on main page **AS it was said, this way you and other users cannot see product images**
+
+
+# Coursework requirements
+
+### Abstraction and Inheritance
+store_app/models.py line 5 is abstract class, and then Guest, Customer, Seller, and Product are children of abstarct class
+
+### Encapsulation
+store_app/models.py Guest, Customer, and Seller classes have _ (protected) fields, and by default fields are also private inside django models
+
+### Polymorphism and writing to file
+store_app/views.py line 56 is a function where we treat Guest, Customer, and Seller objects as same type and write all usernames into the file
+
+### Decorator
+Different decorators are used throughout store_app/views.py
