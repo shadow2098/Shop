@@ -105,7 +105,7 @@ def add_product(request):
 
 @csrf_exempt
 def process_account(request):
-    logic...
+    # logic of this funtion is store_app/views.py line 111
 ```
 # Future prospects
 
