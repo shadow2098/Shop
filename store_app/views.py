@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect, render
 
+from django.core.files.storage import default_storage
+from django.conf import settings
+
 from itertools import chain
 
 import datetime
@@ -23,19 +26,23 @@ def add_product(request):
     except:
         return render(request, 'store_app/cannot_enter_customer.html')
 
-@csrf_exempt
+
 def add_product_process(request):
-    data = json.loads(request.body.decode('utf-8'))
-    name = data['name']
-    price = data['price']
-    digital = False
-    image = data['image']
+    name = request.POST.get('name')
+    price = request.POST.get('price')
+    digital = request.POST.get('digital')
+    image = request.FILES.get('image')
+
+    if image:
+        image_path = default_storage.save('' + image.name, image)
+    else:
+        image_path = None
 
     product = Product.objects.create(
         name=name,
-        price=price,
+        price=int(price),
         digital=digital,
-        image=image
+        image=image_path,
     )
     product.save()
 

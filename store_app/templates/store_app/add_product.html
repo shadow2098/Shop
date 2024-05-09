@@ -6,6 +6,7 @@
         <div class="log_in-box-element" id="form-wrapper">
             <form enctype="multipart/form-data" id="form">
                 <div class="form-field">
+                    {% csrf_token %}
                     <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" required>
                 </div>
@@ -37,7 +38,7 @@
         submit_form_data();
         console.log('Form is submitted');
     });
-
+/*
     function submit_form_data() {
         var product_data = {
             'name': null,
@@ -77,6 +78,37 @@
             console.error('Error:', error);
         });
     }
+*/
+    function submit_form_data() {
+        var form = document.getElementById('form');
+        var formData = new FormData(form); // Create FormData object from the form
+
+        var url_name = 'http://127.0.0.1:8000/add_product_process/';
+
+        fetch(url_name, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            body: formData // Use FormData object as the request body
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .then(data => {
+            console.log('Response from server:', data);
+            alert('Product added successfully');
+            window.location.href = "http://127.0.0.1:8000/"; // Redirect to home page
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
 </script>
 
 {% endblock content %}
