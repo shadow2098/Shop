@@ -33,31 +33,38 @@ def add_product_process(request):
     digital = request.POST.get('digital')
     image = request.FILES.get('image')
 
+    # Ensure price is provided
+    if price is None or not price.strip():
+        return JsonResponse({'error': 'Price is required'}, status=400)
+
     if image:
         image_path = default_storage.save('' + image.name, image)
     else:
         image_path = None
 
-    product = Product.objects.create(
-        name=name,
-        price=int(price),
-        digital=digital,
-        image=image_path,
-    )
-    product.save()
+    try:
+        product = Product.objects.create(
+            name=name,
+            price=int(price),
+            digital=digital,
+            image=image_path,
+        )
+        product.save()
 
-    if hasattr(request.user, 'seller'):
-        seller = request.user.seller
-        if seller.my_products:
-            seller.my_products += str(product.id) + ' '
-        else:
-            seller.my_products = str(product.id) + ' '
-        seller.save()
+        if hasattr(request.user, 'seller'):
+            seller = request.user.seller
+            if seller.my_products:
+                seller.my_products += str(product.id) + ' '
+            else:
+                seller.my_products = str(product.id) + ' '
+            seller.save()
 
         return JsonResponse({'success': True})
+    except ValueError:
+        return JsonResponse({'error': 'Invalid price value'}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 def export_all_usernames(request):

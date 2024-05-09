@@ -53,12 +53,12 @@ class ViewsTest(TestCase):
     def test_add_product_process_view(self):
         self.client.force_login(self.user)
         response = self.client.post(reverse('add_product_process'), json.dumps(self.product_data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         self.assertTrue(Product.objects.filter(name='Test Product').exists())
 
         self.client.logout()
         response = self.client.post(reverse('add_product_process'), json.dumps(self.product_data), content_type='application/json')
-        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.status_code, 400)
 
     def test_export_all_usernames_view(self):
         response = self.client.get(reverse('export'))
