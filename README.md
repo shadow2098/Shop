@@ -19,7 +19,7 @@ And fill out the form for the product creation.
   
 2) You can also add products by creating seller account. ***Note: Log out as a superuser in the admin panel before entering http://127.0.0.1:8000/***
 
-Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Log in as seller" -> Click sign up as seller. After that go to http://127.0.0.1:8000/add_product/ and fill out the form. You should be able to see you product apprear in the catalog on main page
+Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Log in as seller" -> Click sign up as seller. After that go to click "Add product button" and fill out the form. You should be able to see you product apprear in the catalog on main page
 
 
 # Coursework requirements
