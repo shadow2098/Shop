@@ -11,16 +11,15 @@ Then, run `python manage.py createsuperuser`. ***Make sure to remember the info 
 
 To start the local server, run `python manage.py runserver`. And enter http://127.0.0.1:8000/ . The store page is now empty, but that's fine since database is empty too.
 
-### How to add products?
-Note: You can use pictures from store_app/static/store_app/images/ for test products  
-1) Enter http://127.0.0.1:8000/admin/ , enter your superuser info, and click the same button as in the image below
+### How to add products? 
+1) Enter http://127.0.0.1:8000/admin/ , enter your superuser info, and click the same button as in the image below  
+Note: You can use pictures from store_app/static/store_app/images/ for test products 
 <img width="1440" alt="admin" src="https://github.com/shadow2098/Shop/assets/93429735/21c1159a-85a4-435e-a55b-f0cfa1ab2cd2">
 And fill out the form for the product creation.    
   
-2) You can also add products by creating seller account. ***Note: Log out as a superuser in the admin panel before entering http://127.0.0.1:8000/***  
-***Important note: If you plan to add products this way, you will NOT be able to see images attached to the products***
+2) You can also add products by creating seller account. ***Note: Log out as a superuser in the admin panel before entering http://127.0.0.1:8000/***
 
-Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Log in as seller" -> Click sign up as seller. After that go to http://127.0.0.1:8000/add_product/ and fill out the form. You should be able to see you product apprear in the catalog on main page **AS it was said, this way you and other users cannot see product images**
+Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Log in as seller" -> Click sign up as seller. After that go to http://127.0.0.1:8000/add_product/ and fill out the form. You should be able to see you product apprear in the catalog on main page
 
 
 # Coursework requirements
