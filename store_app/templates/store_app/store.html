@@ -15,6 +15,11 @@
         </div>
         {% endfor %}
     </div>
+
+    {% if user.is_authenticated and user.seller %}
+        <a href="{% url 'add_product' %}" class="btn btn-primary">Add Product</a>
+    {% endif %}
+
 <script type="text/javascript">
     if (user.last_name == 'seller'){
         document.getElementById('cart-total').classList.add('hidden');
