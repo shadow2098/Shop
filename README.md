@@ -115,7 +115,6 @@ Add few new html pages so that user interaction is more fluent.
 ## Links that may be usefull when reading the code
 https://getbootstrap.com/
 https://getbootstrap.com/docs/4.0/components/navbar/#supported-content
-https://github.com/divanov11/ecom_steps/blob/master/prt6_stp3_main.html
 https://docs.djangoproject.com/en/4.2/howto/csrf/
 https://support.stripe.com/questions/how-to-fix-syntaxerror-unexpected-token-in-json-at-position-0
 https://stackoverflow.com/questions/987142/make-gitignore-ignore-everything-except-a-few-files
