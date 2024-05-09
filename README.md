@@ -25,19 +25,84 @@ Click "Log in" in the up right corner of the http://127.0.0.1:8000/ -> Click "Lo
 # Coursework requirements
 
 ### Abstraction and Inheritance
-store_app/models.py line 5 is abstract class, and then Guest, Customer, Seller, and Product are children of abstarct class
+store_app/models.py line 5 is abstract class, and then Guest, Customer, Seller, and Product are children of abstarct class  
+Example:
+`class AbstracClass(models.Model):`
+   ` class Meta:`
+        `abstract = True`
+
+    `def return_name(self):`
+        `raise NotImplementedError("Subclasses must implement return_name method")`
+
+
+`class Guest(AbstracClass):`
+    `_username = models.CharField(max_length=200, null=False)`
+    `_email = models.CharField(max_length=200, null=False)`
+    `is_a_seller = False`
+
+    `def return_name(self):`
+        `return self._username`
 
 ### Encapsulation
 store_app/models.py Guest, Customer, and Seller classes have _ (protected) fields, and by default fields are also private inside django models
+Example:
+`class Customer(AbstracClass):`
+    `user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)`
+    `_username = models.CharField(max_length=200, null=False)`
+    `_email = models.CharField(max_length=200, null=False)`
+    `_password = models.CharField(max_length=200, null=False)`
+    `_gender = models.CharField(max_length=20, null=True, blank=True)`
+    `is_a_seller = False`
 
 ### Polymorphism and writing to file
-store_app/views.py line 56 is a function where we treat Guest, Customer, and Seller objects as same type and write all usernames into the file
+store_app/views.py line 63 is a function where we treat Guest, Customer, and Seller objects as same type and write all usernames into the file
+Example:
+`def export_all_usernames(request):`
+    `customer_list = Customer.objects.all()`
+    `guest_list = Guest.objects.all()`
+    `seller_list = Seller.objects.all()`
+
+    `result_list = chain(customer_list, guest_list, seller_list)`
+
+    `i = 0`
+    `c_len = len(list(customer_list))`
+    `g_c_len = c_len + len(list(seller_list))`
+
+    `f = open('store_app/templates/store_app/usernames.txt', 'w')`
+    `f.write('Customers:\n')`
+    `for obj in result_list:`
+        `i += 1`
+        `if i == c_len:`
+            `f.write('Guests:\n')`
+        `if i == g_c_len:`
+            `f.write('Sellers:\n')`
+        `f.write('   ' + str(obj._username) + '\n')`
+        `f.write('\n')`
+
+    `f.close()`
+    `return redirect('/usernames.txt/')`
 
 ### Decorator
 Different decorators are used throughout store_app/views.py
+Example:
+`from django.contrib.auth.decorators import login_required`
+`from django.views.decorators.csrf import csrf_exempt`
 
+`@login_required`
+`def add_product(request):`
+    `try:`
+        `if request.user.seller.is_a_seller:`
+            `return render(request, 'store_app/add_product.html')`
+
+    `except:`
+        `return render(request, 'store_app/cannot_enter_customer.html')`
+
+`@csrf_exempt`
+`def process_account(request):`
+    `logic...`
+    
 # Future prospects
-Fix the issue that picture is not visible when seller uploads the product.  
+
 Fix up the javascript code to be less primitive.  
 Add few new html pages so that user interaction is more fluent.
 
@@ -45,7 +110,6 @@ Add few new html pages so that user interaction is more fluent.
 https://getbootstrap.com/
 https://getbootstrap.com/docs/4.0/components/navbar/#supported-content
 https://github.com/divanov11/ecom_steps/blob/master/prt6_stp3_main.html
-@property - makes a method be accessible as an attribute
 https://docs.djangoproject.com/en/4.2/howto/csrf/
 https://support.stripe.com/questions/how-to-fix-syntaxerror-unexpected-token-in-json-at-position-0
 https://stackoverflow.com/questions/987142/make-gitignore-ignore-everything-except-a-few-files
@@ -63,3 +127,4 @@ https://stackoverflow.com/questions/24575680/new-lines-inside-paragraph-in-readm
 https://stackoverflow.com/questions/3828554/how-to-allow-input-type-file-to-accept-only-image-files
 https://blog.hubspot.com/website/opacity-css#:~:text=To%20set%20the%20opacity%20of,invisible).
 https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+https://stackoverflow.com/questions/9129635/adding-an-image-from-a-url-html
